@@ -1,0 +1,235 @@
+<html>
+	<head>
+	<meta name="viewport" content="width=device-width, user-scalable=no" />
+
+<link rel="stylesheet" type="text/css" href="css/estilos.css" />
+		<link rel="stylesheet" type="text/css" href="css/default.css" />
+		<link rel="stylesheet" href="css/estilora.css">
+		<link rel="stylesheet" type="text/css" href="css/component.css" />
+		<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js" integrity="sha384-SlE991lGASHoBfWbelyBPLsUlwY1GwNDJo3jSJO04KZ33K2bwfV9YBauFfnzvynJ" crossorigin="anonymous"></script>
+	  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+		<script type="text/javascript"src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		
+
+		
+		
+		
+		<!--SCRIPT DE ENVIO-->
+		
+		<script type="text/javascript" src="/webiopi.js"></script>
+
+		
+	</head>
+	
+	
+<body>
+		<form name="velocimetra">
+    <input class="slider" type="range" name="control_in" id="range" value="50" min="0" max="100" step="1"
+    oninput="control_acout.value = range.value" ontouchmove="lapinza()">
+    <output name="control_out" id="control_acout" style="text-align: center;">50</output>
+</form>
+<input type="range" min="0" max="100" value="70" class="slider" />
+	
+	<!-- JOYSTICK -->
+	
+	<!-- BOTÓN MOSTRAR/OCULTAR + JOYSTICK-->
+	<div class="estilocultar">
+		<div id="container" class="card-4"></div>
+		
+		
+		
+		
+	
+	<!--DIGITALES-->
+	<div id="botonx" class="card-41" style="display: none;">
+  <div class="grid-botones" style="float: left;">
+  <div class="grid-item"></div>
+  <div class="grid-item"><button class="btn btn-2g btn-2ig " ontouchstart="Adelante()" ontouchend="Stop()"><i class="fas fa-angle-up fa-3x"></i></button></div>
+  <div class="grid-item"></div>  
+  <div class="grid-item"><button class="btn btn-2v btn-2iv" ontouchstart="Izquierda()" ontouchend="Stop()"><i class="fas fa-angle-left fa-3x"></i></button></div>
+  <div class="grid-item"><button class="btn btn-2r btn-2ir" ontouchstart="Stop()">P</button></div>
+  <div class="grid-item"><button class="btn btn-2ve btn-2ive" ontouchstart="Derecha()" ontouchend="Stop()"><i class="fas fa-angle-right fa-3x"></i></button></div>  
+  <div class="grid-item"></div>
+  <div class="grid-item"><button class="btn btn-2b btn-2ib" ontouchstart="Reversa()" ontouchend="Stop()"><i class="fas fa-angle-down fa-3x"></i></button></div>
+  <div class="grid-item"></div>  
+</div>
+	</div>
+		
+</div>		
+	
+	<!-- BOTONES -->
+	
+	<div class="funcionales">
+	<div class="grid-botones">
+  <div class="grid-item"></div>
+  <div class="grid-item"><button class="btn btn-2g btn-2ig" ontouchstart="Subir()" ontouchend="Parars()"><i class="fas fa-sort-up fa-3x" style="padding-top: 15px;"></i></button></div>
+  <div class="grid-item"></div>  
+  <div class="grid-item"><button class="btn btn-2v btn-2iv" ontouchstart="Abrir()"><i class="fas fa-square"></i></button></div>
+  <div class="grid-item"><button class="btn btn-2r btn-2ir" ontouchstart="Stop()">P</button></div>
+  <div class="grid-item"><button class="btn btn-2ve btn-2ive" ontouchstart="Cerrar()"><i class="fas fa-circle"></i></button></div>  
+  <div class="grid-item"></div>
+  <div class="grid-item"><button class="btn btn-2b btn-2ib" ontouchstart="Bajar()" ontouchend="Parars()">X</button></div>
+  <div class="grid-item"></div>  
+</div>
+</div>
+
+	
+<!--PARTE BAJA -->
+	<div class="ocultar infoo">
+				<button id="cambio" class="btn btn-7 btn-7g btn-icon-only icon-plus" ontouchstart="Ocultar()"></button>
+	</div>
+	
+	<div id="info" class="infoo">
+			<span id="resulta"></span>
+		</div>	
+
+	<!--  AQUIIIII PINZAAAAAA -->
+	
+	
+
+	
+	
+
+	
+	
+<!--SCRIPT JOYSTICK -->
+		
+<script src="script/virtualjoystick.js"></script>
+	
+<script>
+
+	
+	
+	
+	
+	console.log("touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
+	
+	//VALOR ANTERIOR JOYSTICK
+var anterior;
+	
+	var joystick1	= new VirtualJoystick({
+		container	: document.getElementById('container'),
+		strokeStyle	: 'cyan',
+		limitStickTravel: true,
+		stickRadius	: 120
+		
+	});
+	joystick1.addEventListener('touchStartValidation', function(event){
+		var touch	= event.changedTouches[0];
+		if( touch.pageX == window.innerWidth ){	
+			Canvas();
+			return false;
+			}
+		return true
+	});
+	setInterval(function(){
+				var outputE2	= document.getElementById('resulta');
+				outputE2.innerHTML	= joystick1.deltaX().toFixed(2)
+					+ 'X'+joystick1.deltaY().toFixed(2);
+
+// SCRIPT PARA DETECTAR CAMBIOS
+
+
+	
+	if (anterior!==(joystick1.deltaX())){
+	anterior=joystick1.deltaX();
+	Canvas();
+	
+}
+
+
+// FIN DETECTAR CAMBIOS
+
+
+
+			}, 1/30 * 1000);
+	
+//EVENTO TOUCHSTART JOYSTICK
+	
+	joystick.addEventListener('touchStart', function(){
+		console.log('fire');
+	})
+	
+	
+// WEBIOPI
+	
+	function init() {
+
+			}
+
+	
+			function Canvas() {
+var x=joystick1.deltaX().toFixed(2);
+var y=joystick1.deltaY().toFixed(2);
+var xy=[x,y];
+				webiopi().callMacro("Canvas",xy);
+
+			}
+			
+function Stop() {
+            webiopi().callMacro("BotonStop");
+        }
+	
+	function Subir() {
+            webiopi().callMacro("subirpeq");
+        }
+	
+		function Bajar() {
+            webiopi().callMacro("bajarpeq");
+        }
+	
+		function Parars() {
+            webiopi().callMacro("pararpeq");
+        }
+	
+	function Abrir() {
+            webiopi().callMacro("Abrir");
+        }
+	
+	function Cerrar() {
+            webiopi().callMacro("Cerrar");
+        }
+	
+	 function Aceleracion() {
+            webiopi().callMacro("Aceleracion", control_acout.value);
+        }
+        function Adelante() {
+            webiopi().callMacro("BotonAdelante");
+        }
+        function Reversa() {
+            webiopi().callMacro("BotonReversa");
+        }
+        function Izquierda() {
+            webiopi().callMacro("BotonIzquierda");
+        }
+        function Derecha() {
+            webiopi().callMacro("BotonDerecha");
+        }
+		function lapinza() {
+            webiopi().callMacro("Pinza", control_acout.value);
+        }
+	
+	function Ocultar() {
+            var x = document.getElementById("container");
+            var y = document.getElementById("info");
+            var z = document.getElementById("botonx");
+            var q = document.getElementById("cambio");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+                y.style.display = "block";
+                z.style.display = "none";
+                q.innerHTML = "Ocultar"
+            } else {
+                x.style.display = "none";
+                y.style.display = "none";
+                z.style.display = "block";
+                q.innerHTML = "Mostrar"
+            }
+        }
+			webiopi().ready(init);
+
+</script>    
+
+
+	</body>
+</html>
