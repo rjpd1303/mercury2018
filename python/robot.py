@@ -52,6 +52,7 @@ motori_in2 = 4
 GPIO.setup(motori_in2, GPIO.OUT)
 
 
+
 """-------------------------------SWICHEO DE MOTORES------------------------------
 ----"""
 
@@ -240,7 +241,7 @@ def pinza(angulo):
 
 """---------------------SWICHEO DE LUZ LED PARA CRUZAR EL TÚNEL-----------------------"""
 #Definimos el pin 24 donde se encontrara el led que servirá de linterna
-led = 24
+led = 11
 #Colocamos el pin del led como salida
 GPIO.setup(led, GPIO.OUT)
 #Variable que controla el estado de la tira led de la linterna
@@ -295,57 +296,68 @@ def internet():
 
 
 """-------------TIRA LED PARA DECORACIÓN Y SEÑAL DE PÉRDIDA DE INTERNET---------------"""
-#Definimos el pin 25 el cual controlará el color rojo de la tira led
-tira_rojo = 25
-#Colocamos el pin del led rojo como salida
-GPIO.setup(tira_rojo, GPIO.OUT)
-#Definimos el pin 10 el cual controlrá el color verde de la tira led
-tira_verde = 10
-#Colocamos el pin del led verde como salida
-GPIO.setup(tira_verde, GPIO.OUT)
-#Definimos el pin 9 el cual controlará el color azul de la tira led
-tira_azul = 9
-#Colocamos el pin del led azul como salida
-GPIO.setup(tira_azul, GPIO.OUT)
-#Guardamos el ciclo de colores en RGB que seguirá la tira
-colores = ("000", "011", "001", "101", "100", "110", "010")
-#Variable que controla el ciclo infinito de la vizualización de la tira led
+#LEDS
+green = 10
+red = 25
+blue = 9
+GPIO.setup(red, GPIO.OUT) 
+GPIO.setup(green, GPIO.OUT)
+GPIO.setup(blue, GPIO.OUT)
+
+#PWM LEDS
+Freq = 100
+
+RED = GPIO.PWM(red, Freq)  
+GREEN = GPIO.PWM(green, Freq)
+BLUE = GPIO.PWM(blue, Freq)
 tira_led = True
-
-
-def color(R, G, B):
-	"""Enciende la tira led el color que se especifique"""
-	GPIO.output(tira_rojo, R)
-	GPIO.output(tira_verde, G)
-	GPIO.output(tira_azul, B)
 
 
 def whitru():
 	"""Ejecuta el ciclo infinito para la visualización de la tira led"""
 	global tira_led
-	global infinito
 	#Recorre cada posición del vector colores
-	for todo in colores:
-		#Imprime cada valor
-		print ((todo[0], todo[1], todo[2]))
-		#Llama a la función color e ilumino cada sección según su color especifico
-		color(int(todo[0]), int(todo[1]), int(todo[2]))
-		time.sleep(2)
-		if (tira_led is False):
-			break
-		if (infinito is False):
-			break
+	
+	
+	RED.start(1)
+	GREEN.start(100)
+	BLUE.start(100)
+
+	for x in range(1,101):
+				if (tira_led is False):
+					break
+				GREEN.ChangeDutyCycle(101-x)
+				time.sleep(0.05) 
+
+	for x in range(1,101):
+				if (tira_led is False):
+					break
+				RED.ChangeDutyCycle(x)
+				time.sleep(0.015)
+
+	for x in range(1,101):
+				if (tira_led is False):
+					break
+				GREEN.ChangeDutyCycle(x)
+				BLUE.ChangeDutyCycle(101-x)
+				time.sleep(0.015)
+
+	for x in range(1,101):
+				if (tira_led is False):
+					break
+				RED.ChangeDutyCycle(101-x)
+				time.sleep(0.015)
 
 
 def whifalse():
 	"""Función que muestra la tira led en rojo y parpadea cuando no hay internet"""
 	#Enciende el rojo y apaga los otros colores
-	GPIO.output(tira_rojo, 0)
-	GPIO.output(tira_verde, 1)
-	GPIO.output(tira_azul, 1)
+	GREEN.ChangeDutyCycle(0)
+	RED.ChangeDutyCycle(100)
+	BLUE.ChangeDutyCycle(0)
 	time.sleep(1)
 	#Apaga el rojo
-	GPIO.output(tira_rojo, 1)
+	RED.ChangeDutyCycle(0)
 	time.sleep(1)
 
 
